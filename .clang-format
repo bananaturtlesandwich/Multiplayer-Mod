@@ -1,0 +1,18 @@
+# Format Style Options - Created with Clang Power Tools
+---
+AccessModifierOffset: 0
+AllowShortEnumsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+BreakBeforeBraces: Allman
+ColumnLimit: 110
+IndentCaseBlocks: true
+IndentCaseLabels: true
+IndentWidth: 4
+SpaceBeforeCaseColon: false
+SpacesBeforeTrailingComments: 1
+SpacesInConditionalStatement: true
+Standard: c++14
+TabWidth: 4
+UseTab: ForIndentation
+...

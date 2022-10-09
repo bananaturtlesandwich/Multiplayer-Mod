@@ -1,0 +1,16 @@
+{
+  "name": "host-server",
+  "version": "1.0.0",
+  "description": "The server that allows connection between clients on the UnrealChat mod",
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.2"
+  },
+  "bin": "index.js",
+  "pkg": {
+    "assets": [
+      "./index.html",
+      "./node_modules/*"
+    ]
+  }
+}
