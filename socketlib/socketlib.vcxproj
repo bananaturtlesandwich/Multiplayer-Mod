@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5A510836-681E-40BE-B1F7-05F0634A3001}</ProjectGuid>
+    <ProjectGuid>{6B431257-334D-4AF5-8AE1-CF53D93B9CAE}</ProjectGuid>
     <RootNamespace>ExampleMod</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>socketlib</ProjectName>
