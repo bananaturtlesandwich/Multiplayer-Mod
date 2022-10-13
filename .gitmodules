@@ -4,3 +4,6 @@
 [submodule "socketlib/socket.io-client-cpp"]
 	path = socketlib/socket.io-client-cpp
 	url = https://github.com/socketio/socket.io-client-cpp
+[submodule "src/socket.io-client-cpp"]
+	path = src/socket.io-client-cpp
+	url = https://github.com/socketio/socket.io-client-cpp

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Mod">
+      <UniqueIdentifier>{75f3882b-4b15-409c-8a85-04c5553c172b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{44724e15-5d4d-4fea-9d16-2c70742e4634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UE4">
+      <UniqueIdentifier>{750cdc15-5d4b-4345-8c95-09761dc96051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="socket.io">
+      <UniqueIdentifier>{8f87f92f-d19d-452f-b09c-7280af09d455}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UnrealModLoader\UnrealEngineModLoader\UE4\Basic.cpp">
+      <Filter>UE4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UnrealModLoader\UnrealEngineModLoader\UE4\CoreUObject_functions.cpp">
+      <Filter>UE4</Filter>
+    </ClCompile>
+    <ClCompile Include="multiplayer.cpp">
+      <Filter>Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="socket.io-client-cpp\src\sio_client.cpp">
+      <Filter>socket.io</Filter>
+    </ClCompile>
+    <ClCompile Include="socket.io-client-cpp\src\internal\sio_client_impl.cpp">
+      <Filter>socket.io</Filter>
+    </ClCompile>
+    <ClCompile Include="socket.io-client-cpp\src\internal\sio_packet.cpp">
+      <Filter>socket.io</Filter>
+    </ClCompile>
+    <ClCompile Include="socket.io-client-cpp\src\sio_socket.cpp">
+      <Filter>socket.io</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\UnrealModLoader\UnrealEngineModLoader\UE4\Ue4.hpp">
+      <Filter>UE4</Filter>
+    </ClInclude>
+    <ClInclude Include="multiplayer.h">
+      <Filter>Mod</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
