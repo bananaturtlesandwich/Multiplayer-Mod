@@ -35,6 +35,14 @@ class multiplayer : public Mod
 	virtual void DrawImGui() override;
 
 	private:
+	void JoinMenu();
+	void ChatMenu();
+	bool connected;
+	char *ip;
+	char *port;
+	char *nickname;
+	std::vector<std::string> messages;
 	std::unique_ptr<sio::client> io;
-	UE4::APawn *Player;
+	UE4::APawn *player;
+	std::vector<UE4::APawn *> players;
 };

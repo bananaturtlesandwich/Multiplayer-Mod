@@ -16,17 +16,12 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('message', (msg) => {
-        console.log(msg);
+        console.log('message:' + msg);
         io.emit('message', msg);
     });
 
     // Only broadcast because we don't need to know our own location
     socket.on('move', (msg) => socket.broadcast.emit('move', msg));
-
-    socket.on('test', () => {
-        console.log('test received');
-        io.emit('test');
-    });
 
     socket.on('disconnect', () => console.log('a user disconnected'));
 });
@@ -41,8 +36,8 @@ else
         console.error(err);
     }
 
-port = '4000';
-if (!fs.existsSync('port.txt')) fs.writeFileSync("port.txt", port);
+port = 4000;
+if (!fs.existsSync('port.txt')) fs.writeFileSync("port.txt", '4000');
 else
     try {
         port = Number(fs.readFileSync('port.txt', 'utf8'));
@@ -51,5 +46,5 @@ else
         console.error(err);
     }
 
-server.listen(Number(port), ipstring);
+server.listen(port, ipstring);
 console.log("listening on " + ipstring + ':' + port);
