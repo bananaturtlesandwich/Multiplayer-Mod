@@ -5,19 +5,20 @@ void multiplayer::InitializeMod()
 {
 	UE4::InitSDK();
 	SetupHooks();
-	io->socket()->on("message", [&](sio::event &ev) { messages.push_back(ev.get_message()->get_string()); });
+	io->socket()->on("message",
+	                 [&](sio::event &ev) { messages.push_back(ev.get_message()->get_string().c_str()); });
 }
 
-// use this variable so that postbeginplay only needs to be called once everytime there's a reload
-// just in case a game uses multiple types of player controller
-bool init = 0;
-void multiplayer::InitGameState() { init = 1; }
+bool init = false;
+// so that postbeginplay is only called once everytime there's a reload
+// unfortunately player cannot be obtained on initgamestate
+void multiplayer::InitGameState() { init = true; }
 
 void multiplayer::PostBeginPlay(std::wstring ModActorName, UE4::AActor *Actor)
 {
 	if ( init )
 	{
-		init = 0;
+		init = false;
 		player = UE4::UGameplayStatics::GetPlayerPawn(0);
 	}
 }
@@ -26,20 +27,18 @@ void multiplayer::PostBeginPlay(std::wstring ModActorName, UE4::AActor *Actor)
 void multiplayer::DX11Present(ID3D11Device *Device, ID3D11DeviceContext *Ctx, ID3D11RenderTargetView *RTV) {}
 
 // not using this as an event tick because it's only called when the menu is opened
-void multiplayer::DrawImGui() { connected ? JoinMenu() : ChatMenu(); }
+void multiplayer::DrawImGui() { connected ? ChatMenu() : JoinMenu(); }
 
 void multiplayer::JoinMenu()
 {
-	ImGui::Begin("Join Menu", (bool *)1, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::InputText("IP", ip, IM_ARRAYSIZE(ip));
-	ImGui::InputText("port", port, IM_ARRAYSIZE(port));
-	ImGui::InputText("nickname", nickname, IM_ARRAYSIZE(nickname));
-	if ( ImGui::Button("Join") )
+	ImGui::Begin("join", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::InputText("ip", (char *)&ip, 10);
+	ImGui::InputText("port", (char *)&port, 5);
+	ImGui::InputText("nickname", (char *)&nickname, 20);
+	if ( ImGui::Button("join") )
 	{
-		std::string address = "ws://";
-		address += ip;
-		address += ':';
-		address += port;
+		// probably not the best way to concatenate :p
+		std::string address = "ws://" + ip + ':' + port;
 		Log::Info("attempting to connect to %s", address);
 		io->connect(address);
 	}
@@ -48,10 +47,14 @@ void multiplayer::JoinMenu()
 
 void multiplayer::ChatMenu()
 {
-	ImGui::Begin("Chat Menu", (bool *)1, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::BeginListBox("chat");
-	for ( std::string message : messages ) ImGui::Text(message.c_str());
+	ImGui::Begin("chat", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::BeginListBox("");
+	for ( const char *message : messages ) ImGui::Text(message);
 	ImGui::EndListBox();
-	if ( ImGui::Button("Leave") ) io->sync_close();
+	if ( ImGui::Button("leave") )
+	{
+		io->sync_close();
+		connected = false;
+	}
 	ImGui::End();
 }

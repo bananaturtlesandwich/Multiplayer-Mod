@@ -7,11 +7,6 @@ const io = new Server(server);
 const fs = require('fs');
 // excuse my javascript i only wrote this because socket.io was the best option imo
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
-// all server events
 io.on('connection', (socket) => {
     console.log('a user connected');
 

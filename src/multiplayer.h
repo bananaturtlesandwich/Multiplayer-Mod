@@ -38,10 +38,10 @@ class multiplayer : public Mod
 	void JoinMenu();
 	void ChatMenu();
 	bool connected;
-	char *ip;
-	char *port;
-	char *nickname;
-	std::vector<std::string> messages;
+	std::string ip;
+	std::string port;
+	std::string nickname;
+	std::vector<const char *> messages;
 	std::unique_ptr<sio::client> io;
 	UE4::APawn *player;
 	std::vector<UE4::APawn *> players;
