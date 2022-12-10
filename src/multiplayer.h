@@ -9,10 +9,13 @@ class multiplayer : public Mod
 	{
 		ModName = "multiplayer";
 		ModVersion = "1.0.0";
-		ModDescription = "A hopefully universal coremod enabling online for most unreal games";
+		ModDescription = "a universal online multiplayer coremod";
 		ModAuthors = "spuds";
-		ModLoaderVersion = "2.2.1";
+		ModLoaderVersion = "2.2.0";
 		io.reset(new sio::client());
+		io->set_logs_verbose();
+		ip = "localhost";
+		port = "4000";
 
 		ModRef = this;
 		CompleteModCreation();
@@ -24,12 +27,12 @@ class multiplayer : public Mod
 	// InitGameState Call
 	virtual void InitGameState() override;
 
-	// PostBeginPlay of EVERY Blueprint ModActor
-	virtual void PostBeginPlay(std::wstring ModActorName, UE4::AActor *Actor) override;
+	// BeginPlay of EVERY Actor
+	virtual void BeginPlay(UE4::AActor *Actor) override;
 
 	// DX11 hook for when an image will be presented to the screen
-	virtual void DX11Present(ID3D11Device *pDevice, ID3D11DeviceContext *pContext,
-	                         ID3D11RenderTargetView *pRenderTargetView) override;
+	virtual void DX11Present(ID3D11Device *dvc, ID3D11DeviceContext *ctx,
+	                         ID3D11RenderTargetView *rtv) override;
 
 	// Call ImGui Here (CALLED EVERY FRAME ON DX HOOK)
 	virtual void DrawImGui() override;
@@ -37,10 +40,10 @@ class multiplayer : public Mod
 	private:
 	void JoinMenu();
 	void ChatMenu();
-	bool connected;
 	std::string ip;
 	std::string port;
 	std::string nickname;
+	char *message;
 	std::vector<const char *> messages;
 	std::unique_ptr<sio::client> io;
 	UE4::APawn *player;
