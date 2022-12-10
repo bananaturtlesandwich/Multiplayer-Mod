@@ -12,13 +12,14 @@ class multiplayer : public Mod
 		ModDescription = "a universal online multiplayer coremod";
 		ModAuthors = "spuds";
 		ModLoaderVersion = "2.2.0";
+
+		ModRef = this;
+		CompleteModCreation();
+
 		io.reset(new sio::client());
 		io->set_logs_verbose();
 		ip = "localhost";
 		port = "4000";
-
-		ModRef = this;
-		CompleteModCreation();
 	}
 
 	// Called When Internal Mod Setup is finished
@@ -43,7 +44,7 @@ class multiplayer : public Mod
 	std::string ip;
 	std::string port;
 	std::string nickname;
-	char *message;
+	std::string input;
 	std::vector<const char *> messages;
 	std::unique_ptr<sio::client> io;
 	UE4::APawn *player;

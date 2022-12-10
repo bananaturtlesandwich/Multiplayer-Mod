@@ -50,9 +50,11 @@ void multiplayer::ChatMenu()
 	ImGui::BeginListBox("");
 	for ( const char *message : messages ) ImGui::Text(message);
 	ImGui::EndListBox();
-	ImGui::InputTextMultiline("", message, 100);
-	ImGui::SameLine();
-	if ( ImGui::Button("send") ) io->socket()->emit("message", sio::string_message::create(message));
+	if ( ImGui::InputText("", (char *)&input, 25, ImGuiInputTextFlags_EnterReturnsTrue) )
+	{
+		io->socket()->emit("message", sio::string_message::create(input));
+		input.clear();
+	}
 	if ( ImGui::Button("leave") ) io->sync_close();
 	ImGui::End();
 }
