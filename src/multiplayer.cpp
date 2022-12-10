@@ -9,7 +9,7 @@ void multiplayer::InitializeMod()
 	                 [&](sio::event &ev) { messages.push_back(ev.get_message()->get_string().c_str()); });
 }
 
-// UE4::UGameplayStatics::GetPlayerController(0) returns null here so do this
+// player does not exist yet and only needs to be retrieved every reload
 bool init;
 void multiplayer::InitGameState() { init = true; }
 
@@ -24,9 +24,22 @@ void multiplayer::BeginPlay(UE4::AActor *Actor)
 }
 
 // i'm just going to use this as an event tick because it's called every frame
-void multiplayer::DX11Present(ID3D11Device *dvc, ID3D11DeviceContext *ctx, ID3D11RenderTargetView *rtv) {}
+void multiplayer::DX11Present(ID3D11Device *dvc, ID3D11DeviceContext *ctx, ID3D11RenderTargetView *rtv)
+{
+	if ( io->opened() && player )
+	{
+		auto trans(player->GetTransform());
+		// Log::Print("location:%f, %f, %f", loc.Translation.X, loc.Translation.Y, loc.Translation.Z);
+		if ( trans.Translation.X )
+		{
+			auto list = ToMessage(trans);
+			list.push(nickname);
+			io->socket()->emit("move", list);
+		}
+	}
+}
 
-// not using this as an event tick because it's only called when the menu is opened
+// can't this as an event tick because it's only called when the menu is open
 void multiplayer::DrawImGui() { io->opened() ? ChatMenu() : JoinMenu(); }
 
 void multiplayer::JoinMenu()
@@ -52,9 +65,37 @@ void multiplayer::ChatMenu()
 	ImGui::EndListBox();
 	if ( ImGui::InputText("", (char *)&input, 25, ImGuiInputTextFlags_EnterReturnsTrue) )
 	{
-		io->socket()->emit("message", sio::string_message::create(input));
+		io->socket()->emit("message", sio::message::list(input));
 		input.clear();
 	}
-	if ( ImGui::Button("leave") ) io->sync_close();
+	if ( ImGui::Button("leave") ) io->close();
 	ImGui::End();
+}
+
+sio::message::list multiplayer::ToMessage(UE4::FTransform trans)
+{
+	sio::message::list list;
+	list.push(sio::double_message::create(trans.Translation.X));
+	list.push(sio::double_message::create(trans.Translation.Y));
+	list.push(sio::double_message::create(trans.Translation.Z));
+
+	list.push(sio::double_message::create(trans.Rotation.W));
+	list.push(sio::double_message::create(trans.Rotation.X));
+	list.push(sio::double_message::create(trans.Rotation.Y));
+	list.push(sio::double_message::create(trans.Rotation.Z));
+
+	list.push(sio::double_message::create(trans.Scale3D.X));
+	list.push(sio::double_message::create(trans.Scale3D.Y));
+	list.push(sio::double_message::create(trans.Scale3D.Z));
+	return list;
+}
+
+UE4::FTransform multiplayer::ToFTransform(sio::message::list list)
+{
+	UE4::FTransform trans;
+	trans.Translation = UE4::FVector(list[0]->get_double(), list[1]->get_double(), list[2]->get_double());
+	trans.Rotation = UE4::FQuat(list[3]->get_double(), list[4]->get_double(), list[5]->get_double(),
+	                            list[6]->get_double());
+	trans.Scale3D = UE4::FVector(list[7]->get_double(), list[8]->get_double(), list[9]->get_double());
+	return trans;
 }

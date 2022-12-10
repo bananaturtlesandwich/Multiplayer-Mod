@@ -17,7 +17,6 @@ class multiplayer : public Mod
 		CompleteModCreation();
 
 		io.reset(new sio::client());
-		io->set_logs_verbose();
 		ip = "localhost";
 		port = "4000";
 	}
@@ -41,6 +40,8 @@ class multiplayer : public Mod
 	private:
 	void JoinMenu();
 	void ChatMenu();
+	sio::message::list ToMessage(UE4::FTransform trans);
+	UE4::FTransform ToFTransform(sio::message::list list);
 	std::string ip;
 	std::string port;
 	std::string nickname;
@@ -48,5 +49,5 @@ class multiplayer : public Mod
 	std::vector<const char *> messages;
 	std::unique_ptr<sio::client> io;
 	UE4::APawn *player;
-	std::vector<UE4::APawn *> players;
+	std::map<const char *, UE4::APawn *> players;
 };
