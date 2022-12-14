@@ -29,12 +29,10 @@ void multiplayer::DX11Present(ID3D11Device *dvc, ID3D11DeviceContext *ctx, ID3D1
 	if ( io->opened() && player )
 	{
 		auto trans(player->GetTransform());
-		// Log::Print("location:%f, %f, %f", loc.Translation.X, loc.Translation.Y, loc.Translation.Z);
 		if ( trans.Translation.X )
 		{
-			auto list = ToMessage(trans);
-			list.push(nickname);
-			io->socket()->emit("move", list);
+			assert(trans.Scale3D.Z == ToFTransform(ToMessage(trans)).Scale3D.Z);
+			Log::Print("location:%f, %f, %f", trans.Translation.X, trans.Translation.Y, trans.Translation.Z);
 		}
 	}
 }

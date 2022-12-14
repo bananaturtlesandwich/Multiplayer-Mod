@@ -13,12 +13,12 @@ class multiplayer : public Mod
 		ModAuthors = "spuds";
 		ModLoaderVersion = "2.2.0";
 
-		ModRef = this;
-		CompleteModCreation();
-
 		io.reset(new sio::client());
 		ip = "localhost";
 		port = "4000";
+
+		ModRef = this;
+		CompleteModCreation();
 	}
 
 	// Called When Internal Mod Setup is finished
